@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>User Profile</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<div class="mb-3">
+
+{% if user.profile_image %}
+<img src="{{ user.profile_image.url }}" width="150">
+{% endif %}
+
+</div>
+
+<div class="mb-3">
+
+<label>Profile Image</label>
+
+<input type="file" name="profile_image" class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>Username</label>
+
+<input type="text" name="username" value="{{ user.username }}" class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>Email</label>
+
+<input type="email" name="email" value="{{ user.email }}" class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>Phone</label>
+
+<input type="text" name="phone" value="{{ user.phone }}" class="form-control">
+
+</div>
+
+<button class="btn btn-primary">Update Profile</button>
+
+</form>
+
+{% endblock %}

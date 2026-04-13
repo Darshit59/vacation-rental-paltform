@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h2>Book Property</h2>
+
+<h4>{{ property.title }}</h4>
+
+<p>Location: {{ property.location }}</p>
+
+<p>Price per night: ₹ {{ property.price_per_night }}</p>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Check-in Date</label>
+<input type="date" name="check_in" class="form-control" required>
+</div>
+
+<div class="mb-3">
+<label>Check-out Date</label>
+<input type="date" name="check_out" class="form-control" required>
+</div>
+
+<button class="btn btn-success">
+Confirm Booking
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    :root {
+        --brand-color: #ff385c; /* Premium Pink-Red */
+        --glass-bg: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Hero Section with Glassmorphism Search */
+    .hero-wrapper {
+        position: relative;
+        height: 75vh;
+        background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), 
+                    url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2000&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        border-radius: 0 0 40px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: -60px; /* Overlap effect for search bar */
+    }
+
+    .glass-search-box {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 30px;
+        border-radius: 30px;
+        width: 90%;
+        max-width: 950px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+
+    /* Category Icons Styling */
+    .category-container {
+        margin-top: 100px;
+        padding-bottom: 20px;
+        display: flex;
+        gap: 40px;
+        overflow-x: auto;
+        scrollbar-width: none; /* Firefox */
+    }
+    .category-container::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+    .cat-pill {
+        text-align: center;
+        color: #717171;
+        cursor: pointer;
+        transition: 0.3s;
+        min-width: 70px;
+        border-bottom: 2px solid transparent;
+    }
+    .cat-pill:hover, .cat-pill.active {
+        color: #000;
+        border-bottom: 2px solid #000;
+        transform: translateY(-3px);
+    }
+
+    /* Premium Property Card */
+    .property-card-wrapper {
+        border: none;
+        background: transparent;
+        transition: 0.3s ease;
+    }
+    .img-container {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        aspect-ratio: 1/1;
+    }
+    .img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.6s ease;
+    }
+    .property-card-wrapper:hover .img-container img {
+        transform: scale(1.1);
+    }
+
+    .heart-icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        color: white;
+        font-size: 1.4rem;
+        z-index: 10;
+        text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .price-tag {
+        font-weight: 700;
+        color: #222;
+    }
+
+    /* Hosting Banner */
+    .hosting-banner {
+        background: #222;
+        color: white;
+        border-radius: 24px;
+        padding: 60px;
+        margin: 80px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+</style>
+
+<div class="hero-wrapper text-white text-center">
+    <div class="container d-flex flex-column align-items-center">
+        <h1 class="display-3 fw-bold mb-5">Explore the World.</h1>
+        <div class="glass-search-box">
+            <form action="/search/" method="GET" class="row g-3 align-items-center">
+                <div class="col-md-4 text-start border-end border-light">
+                    <label class="small fw-bold text-white mb-1 px-3">LOCATION</label>
+                    <input type="text" name="q" class="form-control bg-transparent border-0 text-white placeholder-white shadow-none" placeholder="Where to?">
+                </div>
+                <div class="col-md-3 text-start border-end border-light">
+                    <label class="small fw-bold text-white mb-1 px-3">CHECK IN</label>
+                    <input type="date" class="form-control bg-transparent border-0 text-white shadow-none">
+                </div>
+                <div class="col-md-3 text-start">
+                    <label class="small fw-bold text-white mb-1 px-3">GUESTS</label>
+                    <input type="number" class="form-control bg-transparent border-0 text-white shadow-none" placeholder="Add guests">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-danger w-100 rounded-pill py-3 fw-bold shadow" style="background-color: var(--brand-color); border: none;">
+                        Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="category-container">
+        <div class="cat-pill active"><i class="bi bi-fire fs-3"></i><p class="small m-0">Trending</p></div>
+        <div class="cat-pill"><i class="bi bi-houses fs-3"></i><p class="small m-0">Cabin</p></div>
+        <div class="cat-pill"><i class="bi bi-water fs-3"></i><p class="small m-0">Lakefront</p></div>
+        <div class="cat-pill"><i class="bi bi-brightness-high fs-3"></i><p class="small m-0">Desert</p></div>
+        <div class="cat-pill"><i class="bi bi-tree fs-3"></i><p class="small m-0">National Park</p></div>
+        <div class="cat-pill"><i class="bi bi-snow fs-3"></i><p class="small m-0">Arctic</p></div>
+        <div class="cat-pill"><i class="bi bi-building-check fs-3"></i><p class="small m-0">Iconic</p></div>
+    </div>
+
+    <div class="row g-4 mt-2">
+        {% for property in properties %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card property-card-wrapper h-100 position-relative">
+                <div class="img-container shadow-sm">
+                    <i class="bi bi-heart heart-icon"></i>
+                    {% if property.propertyimage_set.first %}
+                        <img src="{{ property.propertyimage_set.first.image.url }}" alt="{{ property.title }}">
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center h-100">No Image</div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body px-0 pt-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-0 text-truncate">{{ property.location }}</h6>
+                        <span>⭐ {{ property.average_rating|default:"5.0" }}</span>
+                    </div>
+                    <p class="text-muted small mb-1">{{ property.title }}</p>
+                    <p class="price-tag mb-0">₹ {{ property.price_per_night }} <span class="fw-normal text-muted">night</span></p>
+                    
+                    <a href="/property/{{ property.id }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="hosting-banner shadow-lg">
+        <div class="col-md-6">
+            <h1 class="display-5 fw-bold mb-3">Host your home on StayEase.</h1>
+            <p class="lead opacity-75 mb-4">Join our community and start earning by sharing your space with travelers from all over the world.</p>
+            <button class="btn btn-light rounded-pill px-5 py-3 fw-bold">Setup My Home</button>
+        </div>
+        <div class="col-md-5 d-none d-md-block">
+            <img src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?q=80&w=1000&auto=format&fit=crop" class="img-fluid rounded-4" alt="Host">
+        </div>
+    </div>
+</div>
+
+<footer class="bg-white border-top py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <h4 class="fw-bold" style="color: var(--brand-color);">StayEase.</h4>
+                <p class="text-muted small mt-3">Find and book unique accommodations around the globe. Your journey starts here.</p>
+            </div>
+            <div class="col-lg-2 ms-auto">
+                <h6 class="fw-bold">Support</h6>
+                <ul class="list-unstyled text-muted small mt-3 lh-lg">
+                    <li>Help Centre</li>
+                    <li>AirCover</li>
+                    <li>Cancellation options</li>
+                </ul>
+            </div>
+            <div class="col-lg-2">
+                <h6 class="fw-bold">Hosting</h6>
+                <ul class="list-unstyled text-muted small mt-3 lh-lg">
+                    <li>StayEase your home</li>
+                    <li>AirCover for Hosts</li>
+                    <li>Hosting resources</li>
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <h6 class="fw-bold">Follow us</h6>
+                <div class="d-flex gap-3 fs-4 mt-3 text-muted">
+                    <i class="bi bi-facebook"></i>
+                    <i class="bi bi-instagram"></i>
+                    <i class="bi bi-twitter-x"></i>
+                </div>
+            </div>
+        </div>
+        <hr class="my-5 text-muted">
+        <div class="d-flex flex-column flex-md-row justify-content-between text-muted small">
+            <p>© 2026 StayEase Inc. · Privacy · Terms · Sitemap</p>
+            <p>English (IN) · ₹ INR</p>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .placeholder-white::placeholder { color: rgba(255,255,255,0.7) !important; }
+</style>
+{% endblock %}

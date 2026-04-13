@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block body_class %}
+login-page
+{% endblock %}
+
+{% block content %}
+
+<div class="login-container">
+
+<h2>Enter OTP</h2>
+
+<p style="text-align:center;">
+OTP email par bheja gaya hai 📩
+</p>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input type="text"
+name="otp"
+placeholder="Enter 6 digit OTP"
+class="form-control">
+
+<button type="submit"
+class="btn btn-login mt-2">
+
+Verify OTP
+
+</button>
+
+</form>
+
+<p style="color:red; text-align:center;">
+{{ error }}
+</p>
+
+</div>
+
+{% endblock %}

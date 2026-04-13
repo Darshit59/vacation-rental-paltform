@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+<h2 class="dashboard-title">My Bookings</h2>
+
+<!-- Booking Stats -->
+
+<div class="row mb-4">
+
+<div class="col-md-4">
+<div class="dashboard-card card-blue">
+<h5>Total Bookings</h5>
+<h2>{{ bookings|length }}</h2>
+</div>
+</div>
+
+</div>
+
+
+<div class="booking-card">
+
+<table class="booking-table">
+
+<thead>
+
+<tr>
+<th>Property</th>
+<th>Image</th>
+<th>Check-in</th>
+<th>Check-out</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for booking in bookings %}
+
+<tr>
+
+<td>
+<strong>{{ booking.property.title }}</strong>
+</td>
+
+<td>
+
+{% if booking.property.propertyimage_set.first %}
+<img src="{{ booking.property.propertyimage_set.first.image.url }}" width="80">
+{% endif %}
+
+</td>
+
+<td>{{ booking.check_in }}</td>
+
+<td>{{ booking.check_out }}</td>
+
+<td>
+
+{% if booking.booking_status == "pending" %}
+<span class="status pending">Pending</span>
+
+{% elif booking.booking_status == "confirmed" %}
+<span class="status confirmed">Confirmed</span>
+
+{% else %}
+<span class="status cancelled">Cancelled</span>
+{% endif %}
+
+</td>
+
+<td>
+
+<a href="/property/{{ booking.property.id }}" class="btn btn-primary btn-sm">
+View
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="6" style="text-align:center;">No bookings found</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}

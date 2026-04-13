@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+<h2 class="mb-4">Add Property</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="mb-3">
+<label class="form-label">Title</label>
+{{ form.title }}
+</div>
+
+<div class="mb-3">
+<label class="form-label">Description</label>
+{{ form.description }}
+</div>
+
+<div class="mb-3">
+<label class="form-label">Location</label>
+{{ form.location }}
+</div>
+
+<div class="mb-3">
+<label class="form-label">Price per night</label>
+{{ form.price_per_night }}
+</div>
+
+<div class="mb-3">
+<label class="form-label">Property type</label>
+{{ form.property_type }}
+</div>
+
+<div class="mb-3">
+<label class="form-label">Bedrooms</label>
+{{ form.bedrooms }}
+</div>
+
+<div class="mb-3">
+<label class="form-label">Bathrooms</label>
+{{ form.bathrooms }}
+</div>
+
+<div class="mb-3">
+<label class="form-label">Max guests</label>
+{{ form.max_guests }}
+</div>
+
+<button type="submit" class="btn btn-success">
+Save Property
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

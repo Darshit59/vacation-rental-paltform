@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+<h2 class="dashboard-title">Host Dashboard</h2>
+
+<!-- Stats -->
+
+<div class="row mb-4">
+
+<div class="col-md-4">
+<div class="dashboard-card card-blue">
+<h5>Total Properties</h5>
+<h2>{{ total_properties }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="dashboard-card card-green">
+<h5>Total Bookings</h5>
+<h2>{{ total_bookings }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="dashboard-card card-yellow">
+<h5>Total Earnings</h5>
+<h2>₹ {{ total_earnings }}</h2>
+</div>
+</div>
+
+</div>
+
+<!-- Charts -->
+
+<div class="row mb-5">
+
+<div class="col-md-6">
+<div class="booking-card p-4">
+<h4>Monthly Revenue</h4>
+<canvas id="revenueChart"></canvas>
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="booking-card p-4">
+<h4>Booking Growth</h4>
+<canvas id="bookingChart"></canvas>
+</div>
+</div>
+
+</div>
+
+<!-- Add Property -->
+
+<a href="/add-property/" class="btn btn-primary mb-4">Add Property</a>
+
+<!-- Properties -->
+
+<div class="row">
+
+{% for property in properties %}
+
+<div class="col-md-4">
+
+<div class="property-card">
+
+{% if property.propertyimage_set.first %}
+<img src="{{ property.propertyimage_set.first.image.url }}">
+{% endif %}
+
+<div class="property-card-body">
+
+<h5>{{ property.title }}</h5>
+<p>{{ property.location }}</p>
+<p>₹ {{ property.price_per_night }}</p>
+
+<a href="/edit-property/{{ property.id }}" class="btn btn-warning btn-sm">Edit</a>
+<a href="/delete-property/{{ property.id }}" class="btn btn-danger btn-sm">Delete</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const months = {{ months|safe }};
+const revenue = {{ revenue|safe }};
+const bookings = {{ booking_counts|safe }};
+
+console.log(months, revenue, bookings);
+
+// Revenue Chart
+new Chart(document.getElementById('revenueChart'), {
+type: 'line',
+data: {
+labels: months,
+datasets: [{
+label: 'Monthly Revenue',
+data: revenue,
+borderColor: '#3b82f6',
+backgroundColor: 'rgba(59,130,246,0.2)',
+borderWidth: 3,
+tension: 0.4
+}]
+}
+});
+
+// Booking Chart
+new Chart(document.getElementById('bookingChart'), {
+type: 'bar',
+data: {
+labels: months,
+datasets: [{
+label: 'Bookings',
+data: bookings,
+backgroundColor: '#10b981'
+}]
+}
+});
+
+</script>
+
+{% endblock %}

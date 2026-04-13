@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Booking Successful ✅</h2>
+
+<a href="{% url 'booking_pdf' booking.id %}" class="btn btn-primary">
+Download PDF
+</a>
+
+{% endblock %}

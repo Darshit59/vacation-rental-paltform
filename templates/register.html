@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="login-container">
+
+<h2>Create Account</h2>
+
+<form method="POST" onsubmit="return validatePassword()">
+
+{% csrf_token %}
+
+<input type="text" name="username" placeholder="Username" class="form-control" required>
+
+<input type="email" name="email" placeholder="Email" class="form-control" required>
+
+
+<!-- PASSWORD -->
+
+<input 
+type="password" 
+name="password" 
+id="password"
+placeholder="Password" 
+class="form-control"
+onkeyup="checkStrength()"
+required
+>
+
+<small id="strengthMsg"></small>
+
+
+<!-- CONFIRM PASSWORD -->
+
+<input 
+type="password"
+name="confirm_password"
+id="confirm_password"
+placeholder="Confirm Password"
+class="form-control"
+required
+>
+
+<small id="matchMsg"></small>
+
+
+<!-- ROLE -->
+
+<select name="role" class="form-control">
+
+<option value="user">User</option>
+<option value="admin">Admin</option>
+
+</select>
+
+
+<button class="btn btn-login mt-3">
+Register
+</button>
+
+</form>
+
+</div>
+
+
+<script>
+
+
+function checkStrength(){
+
+let password = document.getElementById("password").value
+
+let msg = document.getElementById("strengthMsg")
+
+let strength = 0
+
+
+if(password.length >= 6) strength++
+
+if(password.match(/[A-Z]/)) strength++
+
+if(password.match(/[0-9]/)) strength++
+
+if(password.match(/[^A-Za-z0-9]/)) strength++
+
+
+
+if(strength <= 1){
+
+msg.innerHTML = "Weak password"
+
+msg.style.color = "red"
+
+}
+
+else if(strength == 2){
+
+msg.innerHTML = "Medium password"
+
+msg.style.color = "orange"
+
+}
+
+else{
+
+msg.innerHTML = "Strong password"
+
+msg.style.color = "green"
+
+}
+
+}
+
+
+
+function validatePassword(){
+
+let password = document.getElementById("password").value
+
+let confirm = document.getElementById("confirm_password").value
+
+
+if(password != confirm){
+
+document.getElementById("matchMsg").innerHTML = "Passwords do not match"
+
+document.getElementById("matchMsg").style.color = "red"
+
+return false
+
+}
+
+
+if(password.length < 6){
+
+alert("Password must be at least 6 characters")
+
+return false
+
+}
+
+
+return true
+
+}
+
+</script>
+
+{% endblock %}

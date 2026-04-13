@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block body_class %}
+login-page
+{% endblock %}
+
+{% block content %}
+
+<div class="login-container">
+
+<h2>Login</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input type="text" name="username" placeholder="Username" class="form-control">
+
+<input type="password" name="password" placeholder="Password" class="form-control">
+
+<button class="btn btn-login mt-2">Login</button>
+
+</form>
+
+</div>
+
+{% endblock %}

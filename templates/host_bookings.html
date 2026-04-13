@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+<h2 class="dashboard-title">Host Booking Requests</h2>
+
+<div class="booking-card">
+
+<table class="booking-table">
+
+<thead>
+<tr>
+<th>Guest</th>
+<th>Property</th>
+<th>Check-in</th>
+<th>Check-out</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for booking in bookings %}
+
+<tr>
+
+<td>{{ booking.guest.username }}</td>
+
+<td>
+<strong>{{ booking.property.title }}</strong>
+</td>
+
+<td>{{ booking.check_in }}</td>
+
+<td>{{ booking.check_out }}</td>
+
+<td>
+
+{% if booking.booking_status == "pending" %}
+<span class="status pending">Pending</span>
+
+{% elif booking.booking_status == "confirmed" %}
+<span class="status confirmed">Confirmed</span>
+
+{% else %}
+<span class="status cancelled">Cancelled</span>
+{% endif %}
+
+</td>
+
+<td>
+
+<a href="/approve-booking/{{ booking.id }}" class="btn btn-success btn-sm btn-custom">
+Approve
+</a>
+
+<a href="/reject-booking/{{ booking.id }}" class="btn btn-danger btn-sm btn-custom">
+Reject
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="6" style="text-align:center;">No booking requests</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>{{ property.title }}</h2>
+
+<p>{{ property.description }}</p>
+
+<p><b>Location:</b> {{ property.location }}</p>
+
+<p><b>Price:</b> ₹ {{ property.price_per_night }}</p>
+
+<p><b>Bedrooms:</b> {{ property.bedrooms }}</p>
+
+<p><b>Bathrooms:</b> {{ property.bathrooms }}</p>
+
+<p><b>Guests:</b> {{ property.max_guests }}</p>
+
+<a href="/booking/{{ property.id }}" class="btn btn-success">
+Book Now
+</a>
+
+
+
+{% endblock %}
